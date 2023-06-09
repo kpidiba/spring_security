@@ -1,0 +1,8 @@
+<form action="" [formGroup]="validateForm">
+    <h3>Login Form</h3>
+    <label for="">Username</label>
+    <input type="text" formControlName="username" ><br/>
+    <label for="">Password</label>
+    <input type="password"  formControlName="password" ><br/>
+    <button (click)="login()" >Login</button>
+</form>
