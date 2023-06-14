@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "";
+    private static final String SECRET_KEY = "12345678abc00000000000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -29,9 +30,12 @@ public class JwtService {
     public String generateToken(
             Map<String, Object> extractClaims,
             UserDetails userDetail) {
-        return Jwts.builder().setClaims(extractClaims).setSubject(userDetail.getUsername())
+        return Jwts.builder()
+                .setClaims(extractClaims)
+                .setSubject(userDetail.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -54,7 +58,11 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build().parseClaimsJws(token)
+                .getBody();
     }
 
     private Key getSignInKey() {
