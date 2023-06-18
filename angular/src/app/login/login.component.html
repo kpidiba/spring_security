@@ -1,8 +1,34 @@
-<form action="" [formGroup]="validateForm">
+<!-- <form action="" [formGroup]="validateForm">
     <h3>Login Form</h3>
     <label for="">Username</label>
     <input type="text" formControlName="username" ><br/>
     <label for="">Password</label>
     <input type="password"  formControlName="password" ><br/>
     <button (click)="login()" >Login</button>
-</form>
+</form> -->
+
+<div class="bootstrap-wrapper">
+    <div class="container mt">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="text-center"> Login Here</h1>
+                <form [formGroup]="validateForm">
+                    <mat-form-field class="full-width">
+                        <mat-label>Username</mat-label>
+                        <input type="text" matInput formControlName="username">
+                    </mat-form-field>
+                    <mat-form-field class="full-width">
+                        <mat-label>Pasword</mat-label>
+                        <input type="password" matInput name="password"  formControlName="password">
+                    </mat-form-field>
+                    <div class="container text-center">
+                        <button mat-raised-button color="accent" (click)="login()">CONNEXION</button>
+                        <button mat-raised-button color="warn" (click)="reset()" style="margin-left: 10px;">RESET</button>
+                    </div>
+                </form>
+                <br>
+                    {{ validateForm.value | json}}
+            </div>
+        </div>
+    </div>
+</div>

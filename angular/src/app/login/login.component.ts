@@ -9,9 +9,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent {
   validateForm!: FormGroup;
+  credentials = {
+    username:'',
+    password:''
+  }
   constructor(private authService: AuthService, private fb: FormBuilder) {}
   ngOnInit() {
-    console.log('man with mission');
     this.validateForm = this.fb.group({
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
@@ -22,5 +25,22 @@ export class LoginComponent {
     this.authService.login(this.validateForm.get(['username'])!.value,this.validateForm.get(['password'])!.value).subscribe((res: any) => {
       console.log(res);
     })
+  }
+  user() {
+    this.authService.user().subscribe((res: any) => {
+      console.log(res);
+    })
+  }
+
+  reset(){
+    console.log("reset");
+    this.validateForm.get('username')?.reset();
+    this.validateForm.get('password')?.reset();
+    // this.validateForm.reset();
+  }
+
+  onSubmit()
+  {
+    console.log("form is submit");
   }
 }
