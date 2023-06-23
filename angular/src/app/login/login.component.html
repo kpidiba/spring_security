@@ -13,13 +13,14 @@
             <div class="col-md-6 offset-md-3">
                 <h1 class="text-center"> Login Here</h1>
                 <form [formGroup]="validateForm">
-                    <mat-form-field class="full-width">
+                    <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Username</mat-label>
-                        <input type="text" matInput formControlName="username">
+                        <input type="text" matInput formControlName="username" >
+                        
                     </mat-form-field>
                     <mat-form-field class="full-width">
                         <mat-label>Pasword</mat-label>
-                        <input type="password" matInput name="password"  formControlName="password">
+                        <input type="password" matInput   formControlName="password">
                     </mat-form-field>
                     <div class="container text-center">
                         <button mat-raised-button color="accent" (click)="login()">CONNEXION</button>

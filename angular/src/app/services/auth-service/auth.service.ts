@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, tap } from 'rxjs';
 import { User } from 'src/app/models/User';
+import { LoginService } from './login.service';
 
 const BASE_URL = "http://127.0.0.1:8080/api/v1/";
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
- 
+  constructor(private http: HttpClient, private loginService: LoginService) { }
+
   login(username: string, password: string): any {
     console.log(username, password)
     return this.http.post<[]>(BASE_URL + 'auth/login',
@@ -18,25 +19,30 @@ export class AuthService {
       .pipe(
         tap(_ => this.log("User Authentication")),
         map((res: HttpResponse<any>) => {
-          console.log(res.status);
           return res;
         })
       )
   }
 
-  user():any{
-    return this.http.get<[]>(BASE_URL + 'test/users',{})
-      .pipe(
-        tap(_ => this.log("User Authentication")),
-        map((res: any) => {
+  user(): any {
+    const token = this.loginService.getToken()!;
+    const httpOptions = {headers: new HttpHeaders({'Content-Type':'application/json','Authorization': 'Bearer ' + token})}
+    
+    return this.http.get(BASE_URL + 'test/users',httpOptions).subscribe(
+      {
+        next:(res) =>
+        {
           console.log(res);
           return res;
-        })
-      )
+        },
+        error:(error) =>{
+          console.log(error);
+          return error;
+        }
+      }
+    )
   }
-  log(message: string):void {
-    console.log("User Auth Service "+message);
+  log(message: string): void {
+    console.log("User Auth Service " + message);
   }
-  
-
 }

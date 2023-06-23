@@ -1,4 +1,7 @@
 <mat-toolbar color="primary" class="flex justify-content-between">
     <a mat-button routerLink="/">ANGULAR UI</a>
-    <a mat-button routerLink="/login">LOGIN</a>
+    <a mat-button routerLink="/signup">REGISTER</a>
+
+    <a mat-button routerLink="/login" *ngIf="!loggedIn">LOGIN</a>
+    <a mat-button (click)="logout()" *ngIf="loggedIn">LOGOUT</a>
 </mat-toolbar>

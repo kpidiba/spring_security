@@ -1,9 +1,9 @@
 package com.security.test.services;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +17,7 @@ import com.security.test.dao.UserRepository;
 import com.security.test.models.Role;
 import com.security.test.models.User;
 
+@Configuration
 @Service
 public class AuthenticationService {
         @Autowired
