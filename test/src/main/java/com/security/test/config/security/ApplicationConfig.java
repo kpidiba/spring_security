@@ -24,7 +24,7 @@ public class ApplicationConfig {
     public UserDetailsService userDetailsService() {
 
         return username -> repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur n'existe pas"));
+                .orElseThrow(() -> new UsernameNotFoundException("NO USER FOUND"));
     }
 
     @Bean
