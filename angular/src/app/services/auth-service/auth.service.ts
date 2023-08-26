@@ -47,7 +47,7 @@ export class AuthService {
     const token = this.loginService.getToken()!;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      "Authorization": "Bearer "+token,
+      // "Authorization": "Bearer "+token,
       
        // Replace with your actual authorization token
     });

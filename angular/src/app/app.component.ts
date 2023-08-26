@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TokenExpiredServiceService } from './services/token/token-expired-service.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular';
+  constructor(private tokenExpirationService: TokenExpiredServiceService) {}
+
+  ngOnInit(): void {
+    // Check token expiration when the app loads
+    this.tokenExpirationService.checkTokenExpiration();
+  }
 }

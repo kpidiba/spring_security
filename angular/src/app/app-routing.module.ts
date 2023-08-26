@@ -6,10 +6,11 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './services/auth-service/auth.guard';
+import { UserGuard } from './guards/authUser/user.guard';
 
 const routes: Routes = [
   { path: 'users', component: UserComponent },
-  { path: '', component: HomeComponent,pathMatch:'full' ,canActivate:[AuthGuard]},
+  { path: '', component: HomeComponent,pathMatch:'full' ,canActivate:[UserGuard]},
   { path: 'signup', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
 ];

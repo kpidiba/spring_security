@@ -10,16 +10,10 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let newReq = req;
-        
-        // let token = this.loginService.getToken();
-        // const headers = new HttpHeaders()
-        //     .set('Content-Type', 'application/json')
-        //     .set('Authorization', 'Bearer ' + token);
-        // if (token != null) {
-        //     newReq.clone({
-        //         headers: headers
-        //     })
-        // }
+        let token = this.loginService.getToken();
+        if (token != null) {
+            newReq = newReq.clone({setHeaders:{Authorization:`Bearer ${token}`}})
+        }
         return next.handle(newReq);
     }
 }
