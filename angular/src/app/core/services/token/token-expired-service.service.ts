@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '../auth-service/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
-import { LoginService } from '../auth-service/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenExpiredServiceService {
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router) {
 
   }
 
   checkTokenExpiration() {
     // Get the token expiration time from the AuthService
-    const tokenExpiration = this.loginService.getTokenExpiration();
+    const tokenExpiration = this.authService.getTokenExpiration();
 
     if (tokenExpiration) {
       const currentTime = new Date().getTime() / 1000; // Current time in seconds
@@ -34,7 +33,7 @@ export class TokenExpiredServiceService {
 
   private logoutAndRedirect() {
     // Log the user out (clear tokens, user data, etc.)
-    this.loginService.logout();
+    this.authService.logout();
 
     // Redirect to the login page
     this.router.navigate(['/login']);

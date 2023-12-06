@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TokenExpiredServiceService } from './services/token/token-expired-service.service';
+import { TokenExpiredServiceService } from './core/services/token/token-expired-service.service';
 
 @Component({
   selector: 'app-root',
