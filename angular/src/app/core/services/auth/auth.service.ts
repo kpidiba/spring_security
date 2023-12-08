@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, map, tap } from 'rxjs';
+import { User } from 'src/app/core/models/User';
 import jwtDecode from 'jwt-decode';
 const BASE_URL = "http://127.0.0.1:8080/api/v1/";
 @Injectable({

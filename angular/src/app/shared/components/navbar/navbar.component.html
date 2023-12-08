@@ -4,5 +4,4 @@
 
     <a mat-button routerLink="/login" *ngIf="!loggedIn">LOGIN</a>
     <a mat-button (click)="logout()" *ngIf="loggedIn">LOGOUT</a>
-    <span *ngIf="loggedIn">Token Expires in: {{ timer }} minutes</span>
 </mat-toolbar>
