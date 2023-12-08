@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -20,7 +20,9 @@ export class LoginComponent {
     username:'',
     password:''
   }
-  constructor(private authService:AuthService,private router:Router, private fb: FormBuilder) {}
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
   ngOnInit() {
     console.log(this.authService.isLoggedIn());
     // this.loginService.logout();
@@ -34,7 +36,8 @@ export class LoginComponent {
     this.authService.login(this.validateForm.get(['username'])!.value,this.validateForm.get(['password'])!.value).subscribe({
       next:(response:any) => {
         this.authService.loginUser(response.body.token,response.body.name);
-        location.href="";
+        this.router.navigate(["/"]);
+        // location.href="";
       },
       error:(error:any) => {
         console.log(error);

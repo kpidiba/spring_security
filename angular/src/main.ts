@@ -8,20 +8,33 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app/app-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { AuthInterceptor } from './app/core/interceptors/auth.interceptor';
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
-import { AuthService } from './app/core/services/auth/auth.service';
+import { Routes, provideRouter } from '@angular/router';
+import { UserGuard } from './core/guards/authUser/user.guard';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { AuthService } from './core/services/auth/auth.service';
+import { HomeComponent } from './features/home/home.component';
+import { LoginComponent } from './features/login/login.component';
+import { RegisterComponent } from './features/register/register.component';
+import { UserComponent } from './features/user/user.component';
 
+
+const routes: Routes = [
+    { path: 'users', component: UserComponent },
+    { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [UserGuard] },
+    { path: 'signup', component: RegisterComponent },
+    { path: 'login', component: LoginComponent },
+];
 
 bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule, ReactiveFormsModule, AppRoutingModule, FormsModule, MatButtonModule, MatToolbarModule, MatFormFieldModule, MatInputModule),
+        provideRouter(routes),
+        importProvidersFrom(BrowserModule, ReactiveFormsModule,  FormsModule, MatButtonModule, MatToolbarModule, MatFormFieldModule, MatInputModule),
         AuthService, [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
         provideHttpClient(withInterceptorsFromDi()),
         provideAnimations()
     ]
 })
-  .catch(err => console.error(err));
+    .catch(err => console.error(err));

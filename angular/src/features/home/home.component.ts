@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { takeUntil } from 'rxjs';
+import { AuthService } from 'src/core/services/auth/auth.service';
+import { DestroyService } from 'src/shared/services/destroy/destroy.service';
 
 @Component({
     selector: 'app-home',
@@ -10,15 +12,14 @@ import { MatButtonModule } from '@angular/material/button';
     imports: [MatButtonModule]
 })
 export class HomeComponent implements OnInit {
-  constructor(private authService: AuthService) {
-
-  }
+  private authService = inject(AuthService);
+  private destroyService = inject(DestroyService);
   ngOnInit(): void {
   }
 
 
   getUsers() {
-    this.authService.user().subscribe(  
+    this.authService.user().pipe(takeUntil(this.destroyService.onDestroy$)).subscribe(  
       {
             next:(res) =>
             {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -6,10 +6,8 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class TokenExpiredServiceService {
-
-  constructor(private authService: AuthService, private router: Router) {
-
-  }
+  private authService = inject(AuthService);
+  private router=  inject(Router);
 
   checkTokenExpiration() {
     // Get the token expiration time from the AuthService

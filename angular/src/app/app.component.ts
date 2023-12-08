@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { TokenExpiredServiceService } from './core/services/token/token-expired-service.service';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { TokenExpiredServiceService } from 'src/core/services/token/token-expired-service.service';
+import { NavbarComponent } from 'src/shared/components/navbar/navbar.component';
 
 @Component({
     selector: 'app-root',
@@ -12,7 +12,7 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 })
 export class AppComponent {
   title = 'angular';
-  constructor(private tokenExpirationService: TokenExpiredServiceService) {}
+  private tokenExpirationService = inject(TokenExpiredServiceService);
 
   ngOnInit(): void {
     // Check token expiration when the app loads
