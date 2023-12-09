@@ -1,22 +1,13 @@
-<!-- <form action="" [formGroup]="validateForm">
-    <h3>Login Form</h3>
-    <label for="">Username</label>
-    <input type="text" formControlName="username" ><br/>
-    <label for="">Password</label>
-    <input type="password"  formControlName="password" ><br/>
-    <button (click)="login()" >Login</button>
-</form> -->
 
 <div class="bootstrap-wrapper">
     <div class="container mt">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <h1 class="text-center"> Login Here</h1>
+                <h1 class="text-center">LOGIN</h1>
                 <form [formGroup]="validateForm">
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Username</mat-label>
                         <input type="text" matInput formControlName="username" >
-                        
                     </mat-form-field>
                     <mat-form-field class="full-width">
                         <mat-label>Pasword</mat-label>

@@ -22,7 +22,6 @@ export class TokenExpiredServiceService {
         // Token is about to expire, redirect to the login page
         this.logoutAndRedirect();
       }
-      console.log((tokenExpiration.getTime() / 1000) - currentTime);
     } else {
       // Token doesn't exist or has no expiration, treat as invalid
       this.logoutAndRedirect();
