@@ -31,6 +31,7 @@ public class AuthController {
         try {
             return ResponseEntity.ok(service.login(request));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("TOKEN ERREUR");
         }
     }
