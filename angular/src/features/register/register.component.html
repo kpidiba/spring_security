@@ -1,7 +1,26 @@
-<form action="">
-    <h3>Register Form</h3>
-    <label for="">Username</label>
-    <input type="text" name="username" ><br/>
-    <label for="">Password</label>
-    <input type="password" name="password" >
-</form>
+
+<div class="bootstrap-wrapper">
+    <div class="container mt">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="text-center"> Login Here</h1>
+                <form [formGroup]="validateForm">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input type="text" matInput formControlName="username" >
+                        
+                    </mat-form-field>
+                    <mat-form-field class="full-width">
+                        <mat-label>Pasword</mat-label>
+                        <input type="password" matInput   formControlName="password">
+                    </mat-form-field>
+                    <div class="container text-center">
+                        <button mat-raised-button color="accent" (click)="register()">CREER UN COMPTE</button>
+                        <button mat-raised-button color="warn" (click)="reset()" style="margin-left: 10px;">RESET</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>

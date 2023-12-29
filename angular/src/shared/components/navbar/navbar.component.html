@@ -7,7 +7,7 @@
     </div>
 
     <ng-template #emptyList>
+        <span>Token Expires in: {{ remainingTime.minutes }} minutes and {{ remainingTime.seconds }} seconds</span>
         <a mat-button (click)="logout()">LOGOUT</a>
     </ng-template>
-
 </mat-toolbar>
