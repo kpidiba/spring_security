@@ -7,8 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.security.test.token.Token;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,8 +30,6 @@ public class User implements UserDetails {
     private String username;
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
 
     @Enumerated(EnumType.STRING)
     private Role role;

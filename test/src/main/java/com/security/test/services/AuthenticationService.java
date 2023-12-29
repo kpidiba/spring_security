@@ -1,6 +1,5 @@
 package com.security.test.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,12 +11,9 @@ import com.security.test.config.security.AuthenticationRequest;
 import com.security.test.config.security.AuthenticationResponse;
 import com.security.test.config.security.JwtService;
 import com.security.test.config.security.RegisterRequest;
-import com.security.test.dao.TokenRepository;
 import com.security.test.dao.UserRepository;
 import com.security.test.models.Role;
 import com.security.test.models.User;
-import com.security.test.token.Token;
-import com.security.test.token.TokenType;
 
 @Configuration
 @Service
@@ -26,13 +22,11 @@ public class AuthenticationService {
 
         private JwtService jwtService;
         private AuthenticationManager authenticationManager;
-        private TokenRepository tokenRepository;
 
         AuthenticationService(UserRepository userRepository, JwtService jwtService,
-                        AuthenticationManager authenticationManager, TokenRepository tokenRepository) {
+                        AuthenticationManager authenticationManager) {
                 this.userRepository = userRepository;
                 this.authenticationManager = authenticationManager;
-                this.tokenRepository = tokenRepository;
                 this.jwtService = jwtService;
         }
 
@@ -47,9 +41,7 @@ public class AuthenticationService {
                                 .password(passwordEncoder().encode(request.getPassword()))
                                 .role(Role.USER)
                                 .build();
-                var savedUser = userRepository.save(user);
                 var jwtToken = jwtService.generateToken(user);
-                savedToken(savedUser, jwtToken);
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
                                 .name(user.getUsername())
@@ -57,16 +49,6 @@ public class AuthenticationService {
                                 .build();
         }
 
-        private void savedToken(User savedUser, String jwtToken) {
-                var token = Token.builder()
-                                .user(savedUser)
-                                .token(jwtToken)
-                                .tokenType(TokenType.BEARER)
-                                .revoked(false)
-                                .expired(false)
-                                .build();
-                this.tokenRepository.save(token);
-        }
 
         public AuthenticationResponse login(AuthenticationRequest request) {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request
@@ -74,7 +56,6 @@ public class AuthenticationService {
                 var user = userRepository.findByUsername(request.getUsername())
                                 .orElseThrow();
                 var jwtToken = jwtService.generateToken(user);
-                savedToken(user, jwtToken);
                 return AuthenticationResponse.builder()
                                 .role(user.getRole()
                                                 .toString())
