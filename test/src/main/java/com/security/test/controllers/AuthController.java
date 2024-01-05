@@ -11,19 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
 import com.security.test.config.security.AuthenticationRequest;
 import com.security.test.config.security.AuthenticationResponse;
 import com.security.test.config.security.RegisterRequest;
+import com.security.test.dao.UserRepository;
 import com.security.test.services.AuthenticationService;
 
 @RestController
 
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    @Autowired
     private AuthenticationService service;
+    private UserRepository userRepository;
 
+    public AuthController(AuthenticationService service, UserRepository repository) {
+        this.service = service;
+        this.userRepository = repository;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(service.register(request));
+        if (!this.userRepository.existsUserByUsername(request.getUsername())) {
+            return ResponseEntity.ok(service.register(request));
+        }else{
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping("/login")

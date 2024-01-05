@@ -36,11 +36,32 @@ public class AuthenticationService {
         }
 
         public AuthenticationResponse register(RegisterRequest request) {
+
+                // NOTE:Check the role
+                Role role;
+                switch (request.getRole()) {
+                        case "USER":
+                                role = Role.USER;
+                                break;
+                        case "ADMIN":
+                                role = Role.ADMIN;
+                                break;
+                        case "CLIENT":
+                                role = Role.CLIENT;
+                                break;
+                        default:
+                                throw new IllegalArgumentException("Invalid role: ");
+                }
+
+                // NOTE: CREATE USER
                 var user = User.builder()
                                 .username(request.getUsername())
                                 .password(passwordEncoder().encode(request.getPassword()))
-                                .role(Role.USER)
+                                .role(role)
                                 .build();
+                userRepository.save(user);
+
+                // NOTE:GENERATE TOKEN
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
@@ -48,7 +69,6 @@ public class AuthenticationService {
                                 .role(user.getRole().toString())
                                 .build();
         }
-
 
         public AuthenticationResponse login(AuthenticationRequest request) {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request
