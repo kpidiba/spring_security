@@ -18,33 +18,33 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Role {
-    USER(Collections.emptySet()),
-    ADMIN(
-            Set.of(
-                    ADMIN_CREATE,
-                    ADMIN_UPDATE,
-                    ADMIN_READ,
-                    ADMIN_DELETE,
-                    CLIENT_CREATE,
-                    CLIENT_UPDATE,
-                    CLIENT_READ,
-                    CLIENT_DELETE)),
-    CLIENT(
-            Set.of(
-                    CLIENT_CREATE,
-                    CLIENT_READ,
-                    CLIENT_UPDATE,
-                    CLIENT_DELETE));
+        USER(Collections.emptySet()),
+        ADMIN(
+                        Set.of(
+                                        ADMIN_CREATE,
+                                        ADMIN_UPDATE,
+                                        ADMIN_READ,
+                                        ADMIN_DELETE,
+                                        CLIENT_CREATE,
+                                        CLIENT_UPDATE,
+                                        CLIENT_READ,
+                                        CLIENT_DELETE)),
+        CLIENT(
+                        Set.of(
+                                        CLIENT_CREATE,
+                                        CLIENT_READ,
+                                        CLIENT_UPDATE,
+                                        CLIENT_DELETE));
 
-    @Getter
-    private final Set<Permission> permissions;
+        @Getter
+        private final Set<Permission> permissions;
 
-    public List<SimpleGrantedAuthority> getAuthorities() {
-        var authorities = getPermissions()
-                .stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
-                .collect(Collectors.toList());
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
-        return authorities;
-    }
+        public List<SimpleGrantedAuthority> getAuthorities() {
+                var authorities = getPermissions()
+                                .stream()
+                                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                                .collect(Collectors.toList());
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+                return authorities;
+        }
 }
