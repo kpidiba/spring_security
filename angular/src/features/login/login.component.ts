@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -6,6 +6,9 @@ import { JsonPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { takeUntil } from 'rxjs';
+import { DestroyService } from 'src/core/services/destroy/destroy.service';
+import { AuthenticationResponse } from 'src/core/models/AuthentificationResponse';
 
 @Component({
     selector: 'app-login',
@@ -14,18 +17,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     standalone: true,
     imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, JsonPipe]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   validateForm!: FormGroup;
-  credentials = {
-    username:'',
-    password:''
-  }
+  private destroyService = inject(DestroyService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   ngOnInit() {
-    console.log(this.authService.isLoggedIn());
-    // this.loginService.logout();
     this.validateForm = this.fb.group({
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
@@ -33,28 +31,26 @@ export class LoginComponent {
   }
 
   login() {
-    this.authService.login(this.validateForm.get(['username'])!.value,this.validateForm.get(['password'])!.value).subscribe({
-      next:(response:any) => {
-        this.authService.loginUser(response.body.token,response.body.name);
-        this.router.navigate(["/"]);
-        // location.href="";
-      },
-      error:(error:any) => {
-        console.log(error);
+    this.authService.login(this.validateForm.value).pipe(takeUntil(this.destroyService.onDestroy$)).subscribe(
+      {
+        next:(response) => {
+          this.authService.loginUser(response.token,response.name);
+          this.router.navigate(["/"]);
+          this.reset();
+        },
+        error(err) {
+            console.error(err);
+        },
+        complete() {
+            console.info("Authentification success");
+        },
       }
-    });
+    )
   }
   
 
   reset(){
-    console.log("reset");
-    this.validateForm.get('username')?.reset();
-    this.validateForm.get('password')?.reset();
-    // this.validateForm.reset();
+    this.validateForm.reset();
   }
 
-  onSubmit()
-  {
-    console.log("form is submit");
-  }
 }

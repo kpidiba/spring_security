@@ -14,7 +14,7 @@
                         <input type="password" matInput   formControlName="password">
                     </mat-form-field>
                     <div class="container text-center">
-                        <button mat-raised-button color="accent" (click)="login()">CONNEXION</button>
+                        <button mat-raised-button color="accent" [disabled]="validateForm.invalid" (click)="login()">CONNEXION</button>
                         <button mat-raised-button color="warn" (click)="reset()" style="margin-left: 10px;">RESET</button>
                     </div>
                 </form>
