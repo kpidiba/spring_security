@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TokenExpiredServiceService } from '../../services/token/token-expired-service.service';
@@ -8,9 +8,11 @@ import { AuthService } from '../../services/auth/auth.service';
   providedIn: 'root'
 })
 export class UserGuard  {
-  constructor(private authService: AuthService, private router: Router,private tokenExpiration:TokenExpiredServiceService) {
-    
-  }
+
+  private authService = inject(AuthService);
+  private router =inject(Router);
+  private tokenExpiration = inject(TokenExpiredServiceService);
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

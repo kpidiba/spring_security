@@ -4,7 +4,6 @@ import { Observable, catchError, map, takeUntil, tap } from 'rxjs';
 import jwtDecode from 'jwt-decode';
 import { RegisterRequest } from 'src/core/models/RegisterRequest';
 import { AuthenticationRequest } from 'src/core/models/AuthenticationRequest';
-import { DestroyService } from '../destroy/destroy.service';
 import { AuthenticationResponse } from 'src/core/models/AuthentificationResponse';
 import { User } from 'src/core/models/User';
 const BASE_URL = "http://127.0.0.1:8080/api/v1/";

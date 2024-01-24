@@ -1,6 +1,3 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-
 import { importProvidersFrom } from '@angular/core';
 import { AppComponent } from './app/app.component';
 import { MatInputModule } from '@angular/material/input';
@@ -13,7 +10,7 @@ import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { Routes, provideRouter } from '@angular/router';
 import { UserGuard } from './core/guards/authUser/user.guard';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { AuthInterceptor } from './core/interceptors/auth/auth.interceptor';
 import { AuthService } from './core/services/auth/auth.service';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/login/login.component';
