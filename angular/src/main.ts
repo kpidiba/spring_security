@@ -15,14 +15,14 @@ import { AuthService } from './core/services/auth/auth.service';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/login/login.component';
 import { RegisterComponent } from './features/register/register.component';
-import { UserComponent } from './features/user/user.component';
 import { NoAuthGuard } from './core/guards/noAuth/no-auth.guard';
+import { AccessComponent } from './features/access/access.component';
 
 
 const routes: Routes = [
-    { path: 'users', component: UserComponent },
     { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [UserGuard] },
     { path: 'signup', component: RegisterComponent,canActivate:[UserGuard] },
+    { path: 'access', component: AccessComponent,canActivate:[UserGuard] },
     { path: 'login', component: LoginComponent,canActivate:[NoAuthGuard] },
 ];
 

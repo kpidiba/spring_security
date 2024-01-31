@@ -12,7 +12,6 @@ const BASE_URL = "http://127.0.0.1:8080/api/v1/";
 })
 export class AuthService {
   private http = inject(HttpClient);
-
   login(auth: AuthenticationRequest): Observable<AuthenticationResponse> {
     return this.http.post<AuthenticationResponse>(BASE_URL + 'auth/login', auth);
   }

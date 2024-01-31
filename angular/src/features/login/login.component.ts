@@ -9,20 +9,23 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { takeUntil } from 'rxjs';
 import { DestroyService } from 'src/core/services/destroy/destroy.service';
 import { AuthenticationResponse } from 'src/core/models/AuthentificationResponse';
+import { RoleService } from 'src/core/services/role/role.service';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
-    standalone: true,
-    imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, JsonPipe]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, JsonPipe]
 })
 export class LoginComponent implements OnInit {
   validateForm!: FormGroup;
   private destroyService = inject(DestroyService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private roleService = inject(RoleService);
   private fb = inject(FormBuilder);
+
   ngOnInit() {
     this.validateForm = this.fb.group({
       username: [null, [Validators.required]],
@@ -33,23 +36,25 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService.login(this.validateForm.value).pipe(takeUntil(this.destroyService.onDestroy$)).subscribe(
       {
-        next:(response) => {
-          this.authService.loginUser(response.token,response.name);
+        next: (response) => {
+          this.authService.loginUser(response.token, response.name);
           this.router.navigate(["/"]);
+          this.roleService.setUserRole(response.role);
+          console.log(response.role);
           this.reset();
         },
         error(err) {
-            console.error(err);
+          console.error(err);
         },
         complete() {
-            console.info("Authentification success");
+          console.info("Authentification success");
         },
       }
     )
   }
-  
 
-  reset(){
+
+  reset() {
     this.validateForm.reset();
   }
 
