@@ -1,9 +1,8 @@
+import { MatButtonModule } from '@angular/material/button';
+
 import { importProvidersFrom } from '@angular/core';
 import { AppComponent } from './app/app.component';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
@@ -29,7 +28,7 @@ const routes: Routes = [
 bootstrapApplication(AppComponent, {
     providers: [
         provideRouter(routes),
-        importProvidersFrom(BrowserModule, ReactiveFormsModule,  FormsModule, MatButtonModule, MatToolbarModule, MatFormFieldModule, MatInputModule),
+        importProvidersFrom(BrowserModule, ReactiveFormsModule,  FormsModule),
         AuthService, [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
         provideHttpClient(withInterceptorsFromDi()),
         provideAnimations()

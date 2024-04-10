@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar'
+import { MatButtonModule } from '@angular/material/button'
 import { AuthService } from 'src/core/services/auth/auth.service';
 import { DestroyService } from 'src/shared/services/destroy/destroy.service';
 import { takeUntil } from 'rxjs';
