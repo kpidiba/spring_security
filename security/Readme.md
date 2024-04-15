@@ -18,15 +18,13 @@ Spring provides 5 core concepts which should be known to a developer.
 
 **Principal**: Currently Logged in User/Account.
 
+**Refresh Token:** 
+
 **Granted Authority**: Permission or a privilege granted to a user within an application.
 
 **Roles**: Roles are a way to group together related granted authorities into higher-level categories.
 
 Now that we know some basic stuff about security , lets start creating a simple API where we are going to use spring security.
-
-
-
-
 
 ### DEPENDENCIES
 

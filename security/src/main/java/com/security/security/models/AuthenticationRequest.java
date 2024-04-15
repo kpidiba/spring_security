@@ -1,4 +1,4 @@
-package com.security.security.config.security;
+package com.security.security.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

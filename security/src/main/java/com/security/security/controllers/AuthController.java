@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.security.config.security.AuthenticationRequest;
-import com.security.security.config.security.AuthenticationResponse;
-import com.security.security.config.security.RegisterRequest;
 import com.security.security.dao.UserRepository;
+import com.security.security.models.AuthenticationRequest;
+import com.security.security.models.AuthenticationResponse;
+import com.security.security.models.RegisterRequest;
 import com.security.security.services.AuthenticationService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 
@@ -29,8 +32,8 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         if (!this.userRepository.existsUserByUsername(request.getUsername())) {
             return ResponseEntity.ok(service.register(request));
-        }else{
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -42,6 +45,11 @@ public class AuthController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("TOKEN ERREUR");
         }
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        this.service.refreshToken(request, response);
     }
 
 }
