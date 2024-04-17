@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.security.security.dao.UserRepository;
-import com.security.security.models.User;
+import com.security.security.models.auth.User;
+import com.security.security.repository.UserRepository;
 
 @Service
 public class UserService {

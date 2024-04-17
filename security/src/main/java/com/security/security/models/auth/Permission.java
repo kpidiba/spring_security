@@ -1,4 +1,4 @@
-package com.security.security.models;
+package com.security.security.models.auth;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

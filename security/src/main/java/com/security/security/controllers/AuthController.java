@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.security.dao.UserRepository;
-import com.security.security.models.AuthenticationRequest;
-import com.security.security.models.AuthenticationResponse;
-import com.security.security.models.RegisterRequest;
+import com.security.security.models.request.AuthenticationRequest;
+import com.security.security.models.request.AuthenticationResponse;
+import com.security.security.models.request.RegisterRequest;
+import com.security.security.repository.UserRepository;
 import com.security.security.services.AuthenticationService;
 
 import jakarta.servlet.http.HttpServletRequest;

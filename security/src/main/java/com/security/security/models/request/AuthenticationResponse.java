@@ -1,4 +1,4 @@
-package com.security.security.models;
+package com.security.security.models.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

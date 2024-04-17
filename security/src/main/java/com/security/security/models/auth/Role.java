@@ -1,13 +1,13 @@
-package com.security.security.models;
+package com.security.security.models.auth;
 
-import static com.security.security.models.Permission.ADMIN_CREATE;
-import static com.security.security.models.Permission.ADMIN_DELETE;
-import static com.security.security.models.Permission.ADMIN_READ;
-import static com.security.security.models.Permission.ADMIN_UPDATE;
-import static com.security.security.models.Permission.CLIENT_CREATE;
-import static com.security.security.models.Permission.CLIENT_DELETE;
-import static com.security.security.models.Permission.CLIENT_READ;
-import static com.security.security.models.Permission.CLIENT_UPDATE;
+import static com.security.security.models.auth.Permission.ADMIN_CREATE;
+import static com.security.security.models.auth.Permission.ADMIN_DELETE;
+import static com.security.security.models.auth.Permission.ADMIN_READ;
+import static com.security.security.models.auth.Permission.ADMIN_UPDATE;
+import static com.security.security.models.auth.Permission.CLIENT_CREATE;
+import static com.security.security.models.auth.Permission.CLIENT_DELETE;
+import static com.security.security.models.auth.Permission.CLIENT_READ;
+import static com.security.security.models.auth.Permission.CLIENT_UPDATE;
 
 import java.util.Collections;
 import java.util.List;

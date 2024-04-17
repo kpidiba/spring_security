@@ -1,10 +1,10 @@
-package com.security.security.dao;
+package com.security.security.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.security.security.models.User;
+import com.security.security.models.auth.User;
 
 
 public interface  UserRepository extends JpaRepository<User,Integer> {

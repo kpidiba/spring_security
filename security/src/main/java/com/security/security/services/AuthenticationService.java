@@ -11,13 +11,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.security.security.config.security.JwtService;
-import com.security.security.dao.UserRepository;
 import com.security.security.exception.InvalidTokenException;
-import com.security.security.models.AuthenticationRequest;
-import com.security.security.models.AuthenticationResponse;
-import com.security.security.models.RegisterRequest;
-import com.security.security.models.Role;
-import com.security.security.models.User;
+import com.security.security.models.auth.Role;
+import com.security.security.models.auth.User;
+import com.security.security.models.request.AuthenticationRequest;
+import com.security.security.models.request.AuthenticationResponse;
+import com.security.security.models.request.RegisterRequest;
+import com.security.security.models.token.Token;
+import com.security.security.models.token.TokenType;
+import com.security.security.repository.TokenRepository;
+import com.security.security.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,15 +29,16 @@ import jakarta.servlet.http.HttpServletResponse;
 @Service
 public class AuthenticationService {
         private UserRepository userRepository;
-
+        private TokenRepository tokenRepository;
         private JwtService jwtService;
         private AuthenticationManager authenticationManager;
 
         AuthenticationService(UserRepository userRepository, JwtService jwtService,
-                        AuthenticationManager authenticationManager) {
+                        AuthenticationManager authenticationManager, TokenRepository repository) {
                 this.userRepository = userRepository;
                 this.authenticationManager = authenticationManager;
                 this.jwtService = jwtService;
+                this.tokenRepository = repository;
         }
 
         @Bean
@@ -66,16 +70,31 @@ public class AuthenticationService {
                                 .password(passwordEncoder().encode(request.getPassword()))
                                 .role(role)
                                 .build();
-                userRepository.save(user);
-
+                var savedUser = userRepository.save(user);
                 // NOTE:GENERATE TOKEN
+
                 var jwtToken = jwtService.generateToken(user);
+                var token = createToken(savedUser, jwtToken, TokenType.BEARER);
+                this.tokenRepository.save(token);
+
                 var refreshToken = jwtService.generateRefreshToken(user);
+                var tokenRefresh = createToken(savedUser, refreshToken, TokenType.BEARER);
+                this.tokenRepository.save(tokenRefresh);
+                
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .refreshToken(refreshToken)
                                 .name(user.getUsername())
                                 .role(user.getRole().toString())
+                                .build();
+        }
+
+        private Token createToken(User savedUser, String refreshToken, TokenType bearer) {
+                return Token.builder().user(savedUser)
+                                .tokenType(TokenType.BEARER)
+                                .revoked(false)
+                                .expired(false)
+                                .token(refreshToken)
                                 .build();
         }
 
