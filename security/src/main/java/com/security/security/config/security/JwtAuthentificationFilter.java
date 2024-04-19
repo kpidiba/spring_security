@@ -30,10 +30,9 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
     @Autowired
     private TokenRepository tokenRepository;
 
-
-
     @Override
-    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request, @SuppressWarnings("null") HttpServletResponse response,
+    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request,
+            @SuppressWarnings("null") HttpServletResponse response,
             @SuppressWarnings("null") FilterChain filterChain)
             throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
@@ -49,8 +48,15 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 var isTokenValid = tokenRepository.findByToken(jwt)
-                    .map(t -> !t.isExpired() && !t.isRevoked())
-                    .orElse(false);
+                        .map(t -> {
+                            if (t != null && (t.isExpired() || t.isRevoked())) {
+                                t.setExpired(true);
+                                t.setRevoked(true);
+                                tokenRepository.save(t);
+                            }
+                            return !(t == null || t.isExpired() || t.isRevoked());
+                        })
+                        .orElse(false);
 
                 if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username,
@@ -61,6 +67,13 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
+            // NOTE: handle exception
+            var storedToken = this.tokenRepository.findByToken(jwt).orElse(null);
+            if (storedToken != null) {
+                storedToken.setExpired(true);
+                storedToken.setRevoked(true);
+                tokenRepository.save(storedToken);
+            }
             throw new InvalidTokenException("token expired");
         }
         filterChain.doFilter(request, response);
