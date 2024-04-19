@@ -80,7 +80,7 @@ public class AuthenticationService {
                 var refreshToken = jwtService.generateRefreshToken(user);
                 var tokenRefresh = createToken(savedUser, refreshToken, TokenType.BEARER);
                 this.tokenRepository.save(tokenRefresh);
-                
+
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .refreshToken(refreshToken)
@@ -89,22 +89,24 @@ public class AuthenticationService {
                                 .build();
         }
 
-        private Token createToken(User savedUser, String refreshToken, TokenType bearer) {
-                return Token.builder().user(savedUser)
-                                .tokenType(TokenType.BEARER)
-                                .revoked(false)
-                                .expired(false)
-                                .token(refreshToken)
-                                .build();
-        }
-
         public AuthenticationResponse login(AuthenticationRequest request) throws IOException {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request
                                 .getUsername(), request.getPassword()));
                 var user = userRepository.findByUsername(request.getUsername())
                                 .orElseThrow();
+                
+                //NOTE: REVOKE ALL USER TOKEN
+                this.revokeAllUserTokens(user);
+
+                // NOTE:GENERATE TOKEN
                 var jwtToken = jwtService.generateToken(user);
+                var token = createToken(user, jwtToken, TokenType.BEARER);
+                this.tokenRepository.save(token);
+
                 var refreshToken = jwtService.generateRefreshToken(user);
+                var tokenRefresh = createToken(user, refreshToken, TokenType.BEARER);
+                this.tokenRepository.save(tokenRefresh);
+
                 return AuthenticationResponse.builder()
                                 .role(user.getRole()
                                                 .toString())
@@ -128,6 +130,9 @@ public class AuthenticationService {
                                 var user = this.userRepository.findByUsername(username).orElseThrow();
                                 if (jwtService.isTokenValid(refreshToken, user)) {
                                         var accessToken = jwtService.generateToken(user);
+                                        //NOTE: SAUVEGARDER DU NOUVEAU TOKEN
+                                        var token = createToken(user, accessToken, TokenType.BEARER);
+                                        this.tokenRepository.save(token);
                                         var authResponse = AuthenticationResponse.builder()
                                                         .accessToken(accessToken)
                                                         .refreshToken(refreshToken)
@@ -140,6 +145,27 @@ public class AuthenticationService {
                 } catch (Exception e) {
                         throw new InvalidTokenException("refresh token expired");
                 }
+        }
+
+        private Token createToken(User savedUser, String refreshToken, TokenType bearer) {
+                return Token.builder().user(savedUser)
+                                .tokenType(TokenType.BEARER)
+                                .revoked(false)
+                                .expired(false)
+                                .token(refreshToken)
+                                .build();
+        }
+
+        private void revokeAllUserTokens(User user){
+                var validUserTokens = this.tokenRepository.findAllValidTokensByUser(user.getId());
+                if (validUserTokens.isEmpty()){
+                        return;
+                }
+                validUserTokens.forEach(token -> {
+                        token.setExpired(true);
+                        token.setRevoked(true);
+                });
+                this.tokenRepository.saveAll(validUserTokens);
         }
 
 }

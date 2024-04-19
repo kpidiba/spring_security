@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.security.security.exception.InvalidTokenException;
+import com.security.security.repository.TokenRepository;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +26,11 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+
 
     @Override
     protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request, @SuppressWarnings("null") HttpServletResponse response,
@@ -41,7 +48,11 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
         try {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+
+                if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username,
                             null,
                             userDetails.getAuthorities());
