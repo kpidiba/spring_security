@@ -1,4 +1,4 @@
-package com.security.security.models;
+package com.security.security.models.auth;
 
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,15 +25,6 @@ public class User implements UserDetails {
     private Integer id;
     private String username;
     private String password;
-
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
-    }
 
     @Override
     public String getPassword() {
@@ -63,5 +54,11 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
     }
 }

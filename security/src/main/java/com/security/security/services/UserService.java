@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.security.security.dao.UserRepository;
-import com.security.security.models.User;
+import com.security.security.models.auth.User;
 
 @Service
 public class UserService {

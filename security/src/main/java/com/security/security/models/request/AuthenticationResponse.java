@@ -1,4 +1,4 @@
-package com.security.security.config.security;
+package com.security.security.models.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
     private String token;
     private String name;
-    private String role;
 }

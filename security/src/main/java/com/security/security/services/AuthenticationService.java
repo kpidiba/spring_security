@@ -7,13 +7,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.security.security.config.security.AuthenticationRequest;
-import com.security.security.config.security.AuthenticationResponse;
 import com.security.security.config.security.JwtService;
-import com.security.security.config.security.RegisterRequest;
 import com.security.security.dao.UserRepository;
-import com.security.security.models.Role;
-import com.security.security.models.User;
+import com.security.security.models.auth.User;
+import com.security.security.models.request.AuthenticationRequest;
+import com.security.security.models.request.AuthenticationResponse;
+import com.security.security.models.request.RegisterRequest;
 
 @Configuration
 @Service
@@ -37,27 +36,10 @@ public class AuthenticationService {
 
         public AuthenticationResponse register(RegisterRequest request) {
 
-                // NOTE:Check the role
-                Role role;
-                switch (request.getRole()) {
-                        case "USER":
-                                role = Role.USER;
-                                break;
-                        case "ADMIN":
-                                role = Role.ADMIN;
-                                break;
-                        case "CLIENT":
-                                role = Role.CLIENT;
-                                break;
-                        default:
-                                throw new IllegalArgumentException("Invalid role: ");
-                }
-
                 // NOTE: CREATE USER
                 var user = User.builder()
                                 .username(request.getUsername())
                                 .password(passwordEncoder().encode(request.getPassword()))
-                                .role(role)
                                 .build();
                 userRepository.save(user);
 
@@ -66,7 +48,6 @@ public class AuthenticationService {
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
                                 .name(user.getUsername())
-                                .role(user.getRole().toString())
                                 .build();
         }
 
@@ -77,8 +58,6 @@ public class AuthenticationService {
                                 .orElseThrow();
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
-                                .role(user.getRole()
-                                                .toString())
                                 .name(user.getUsername())
                                 .token(jwtToken)
                                 .build();

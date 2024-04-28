@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.security.config.security.AuthenticationRequest;
-import com.security.security.config.security.AuthenticationResponse;
-import com.security.security.config.security.RegisterRequest;
 import com.security.security.dao.UserRepository;
+import com.security.security.models.request.AuthenticationRequest;
+import com.security.security.models.request.AuthenticationResponse;
+import com.security.security.models.request.RegisterRequest;
 import com.security.security.services.AuthenticationService;
 
 @RestController
-
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private AuthenticationService service;

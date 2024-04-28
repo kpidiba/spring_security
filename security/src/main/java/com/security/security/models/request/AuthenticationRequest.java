@@ -1,4 +1,4 @@
-package com.security.security.config.security;
+package com.security.security.models.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
+public class AuthenticationRequest {
     private String username;
     private String password;
-    private String role;
 }
