@@ -44,7 +44,10 @@
 
 4. **Test** 
    
+   - **GET METHOD**
+   
    - **http://localhost:8080/api/v1/admin**
+   
    - **METHODS(GET,POST,PUT,DELETE)**
 
 ## FEATURES
