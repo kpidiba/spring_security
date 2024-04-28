@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.security.security.exception.InvalidTokenException;
+import com.security.security.repository.TokenRepository;
 
-import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,9 +27,13 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private TokenRepository tokenRepository;
+
     @Override
-    protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response,
-            @Nonnull FilterChain filterChain)
+    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request,
+            @SuppressWarnings("null") HttpServletResponse response,
+            @SuppressWarnings("null") FilterChain filterChain)
             throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -43,15 +47,33 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
         try {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                var isTokenValid = tokenRepository.findByToken(jwt)
+                        .map(t -> {
+                            if (t != null && (t.isExpired() || t.isRevoked())) {
+                                t.setExpired(true);
+                                t.setRevoked(true);
+                                tokenRepository.save(t);
+                            }
+                            return !(t == null || t.isExpired() || t.isRevoked());
+                        })
+                        .orElse(false);
+
+                if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username,
                             null,
                             userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                } 
+                }
             }
         } catch (Exception e) {
+            // NOTE: handle exception
+            var storedToken = this.tokenRepository.findByToken(jwt).orElse(null);
+            if (storedToken != null) {
+                storedToken.setExpired(true);
+                storedToken.setRevoked(true);
+                tokenRepository.save(storedToken);
+            }
             throw new InvalidTokenException("token expired");
         }
         filterChain.doFilter(request, response);

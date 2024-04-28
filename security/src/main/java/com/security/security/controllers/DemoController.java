@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.security.models.User;
+import com.security.security.models.auth.User;
 import com.security.security.services.UserService;
 
 @RestController
