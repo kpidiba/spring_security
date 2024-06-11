@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { AuthService } from 'src/core/services/auth/auth.service';
 import { DestroyService } from 'src/shared/services/destroy/destroy.service';
 import { takeUntil } from 'rxjs';
-import { TokenExpiredServiceService } from 'src/core/services/token/token-expired-service.service';
+import { TokenExpiredServiceService } from 'src/core/services/token-expired/token-expired-service.service';
 
 @Component({
   selector: 'app-navbar',

@@ -6,8 +6,6 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/core/services/auth/auth.service';
-import { TokenExpiredServiceService } from 'src/core/services/token/token-expired-service.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {

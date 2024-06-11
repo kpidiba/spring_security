@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TokenExpiredServiceService } from 'src/core/services/token/token-expired-service.service';
+import { TokenExpiredServiceService } from 'src/core/services/token-expired/token-expired-service.service';
 import { NavbarComponent } from 'src/shared/components/navbar/navbar.component';
 
 @Component({

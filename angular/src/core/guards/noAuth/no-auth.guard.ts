@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/core/services/auth/auth.service';
-import { TokenExpiredServiceService } from 'src/core/services/token/token-expired-service.service';
+import { TokenExpiredServiceService } from 'src/core/services/token-expired/token-expired-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { TokenExpiredServiceService } from 'src/core/services/token/token-expire
 export class NoAuthGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router,private tokenExpiration:TokenExpiredServiceService) {
-    
+
   }
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -22,5 +22,5 @@ export class NoAuthGuard implements CanActivate {
       }
       return true;
   }
-  
+
 }

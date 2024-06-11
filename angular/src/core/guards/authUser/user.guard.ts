@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { TokenExpiredServiceService } from '../../services/token/token-expired-service.service';
+import { TokenExpiredServiceService } from '../../services/token-expired/token-expired-service.service';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Injectable({
@@ -23,5 +23,5 @@ export class UserGuard  {
       this.router.navigate(['login']);
       return false;
   }
-  
+
 }
