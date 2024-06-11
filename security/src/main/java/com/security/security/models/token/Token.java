@@ -1,5 +1,6 @@
 package com.security.security.models.token;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.security.security.models.auth.User;
 
 import jakarta.persistence.Entity;
@@ -30,5 +31,6 @@ public class Token {
     private TokenType tokenType;
 
     @ManyToOne
+    @JsonBackReference("user")
     private User user;
 }

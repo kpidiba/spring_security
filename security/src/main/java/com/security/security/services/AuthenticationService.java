@@ -61,7 +61,7 @@ public class AuthenticationService {
                                 role = Role.CLIENT;
                                 break;
                         default:
-                                throw new IllegalArgumentException("Invalid role: ");
+                                throw new IllegalArgumentException("Invalid role: "+request.getRole());
                 }
 
                 // NOTE: CREATE USER

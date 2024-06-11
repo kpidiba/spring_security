@@ -25,7 +25,7 @@ export class AccessComponent implements OnInit {
   @ViewChild(MatPaginator) paginator !: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public dataSource!: MatTableDataSource<any>;
-  displayedColumns: string[] = ['id', 'role', 'action'];
+  displayedColumns: string[] = ['id','name' ,'role', 'action'];
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

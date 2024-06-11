@@ -33,8 +33,8 @@ export class AuthService {
   }
 
 
-  loginUser(token: string, username: string): boolean {
-    this.tokenService.login(token,username);
+  loginUser(username: string,refreshToken:string,accessToken:string): boolean {
+    this.tokenService.login(username,refreshToken,accessToken);
     return true;
   }
 

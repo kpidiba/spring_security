@@ -7,7 +7,7 @@ import jwtDecode from 'jwt-decode';
 export class TokenService {
 
   getToken() {
-    return localStorage.getItem("token");
+    return localStorage.getItem("accessToken");
   }
 
   getTokenExpiration(): Date | null {
@@ -27,13 +27,15 @@ export class TokenService {
     return null;
   }
 
-  login(token: string, username: string) {
-    localStorage.setItem("token", token);
+  login(username: string,refreshToken:string,accessToken:string) {
+    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("username", username);
   }
 
   logout() {
-    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("username");
   }
 

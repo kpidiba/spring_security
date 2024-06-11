@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.validateForm.value).pipe(takeUntil(this.destroyService.onDestroy$)).subscribe(
       {
         next: (response) => {
-          this.authService.loginUser(response.token, response.name);
+          this.authService.loginUser(response.name, response.refresh_token, response.access_token);
           this.router.navigate(["/"]);
           this.roleService.setUserRole(response.role);
           console.log(response.role);
