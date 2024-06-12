@@ -10,10 +10,22 @@ import { RoleService } from '../role/role.service';
 export class TokenExpiredService {
   private authService = inject(AuthService);
   private roleService = inject(RoleService);
-  private router=  inject(Router);
+  private router = inject(Router);
   private tokenService = inject(TokenService)
 
-  checkTokenExpiration() {
+  checkAccessTokenExpiration() {
+    const tokenExpiration = this.tokenService.getAccessTokenExpiration();
+
+    if (tokenExpiration) {
+      const currentTime = new Date().getTime() / 1000; // Current time in seconds
+      const marginInSeconds = 60; // You can adjust this margin
+      return (tokenExpiration.getTime() / 1000) - currentTime < marginInSeconds;
+    } else {
+      return false;
+    }
+  }
+
+  checkRefreshTokenExpiration() {
     // Get the token expiration time from the AuthService
     const tokenExpiration = this.tokenService.getRefreshTokenExpiration();
 

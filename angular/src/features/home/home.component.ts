@@ -61,10 +61,6 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  test(){
-    console.log("click button");
-    this.tokenService.refreshTokens();
-  }
 
   edit(value:number){
 

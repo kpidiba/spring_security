@@ -16,6 +16,6 @@ export class AppComponent {
 
   ngOnInit(): void {
     // Check token expiration when the app loads
-    this.tokenExpirationService.checkTokenExpiration();
+    this.tokenExpirationService.checkRefreshTokenExpiration();
   }
 }

@@ -76,14 +76,10 @@ export class TokenService {
     };
     return this.http.post(`${BASE_URL}/refresh-token`, {}, httpOptions).pipe(takeUntil(this.destroyService.onDestroy$)).subscribe({
       next: (res:any) => {
+        console.log(res['access_token']);
         this.setAccessToken(res['access_token']);
-        return res;
-      },
-      error: (error) => {
-        console.log(error);
-        return error;
       }
-    });;
+    });
   }
 
 }

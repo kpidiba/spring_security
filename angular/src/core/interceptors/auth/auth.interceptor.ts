@@ -13,8 +13,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let newReq = req;
+        this.tokenServiceExpired.checkAccessTokenExpiration();
+        if(this.tokenServiceExpired.checkAccessTokenExpiration()){
+          this.tokenService.refreshTokens();
+        }
         let token = this.tokenService.getAccessToken();
-        this.tokenServiceExpired.checkTokenExpiration();
         if (token != null) {
             newReq = newReq.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
         }

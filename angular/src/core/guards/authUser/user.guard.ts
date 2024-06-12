@@ -17,7 +17,7 @@ export class UserGuard  {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       if (this.authService.isLoggedIn()) {
-        this.tokenExpiration.checkTokenExpiration();
+        this.tokenExpiration.checkRefreshTokenExpiration();
         return true;
       }
       this.router.navigate(['login']);

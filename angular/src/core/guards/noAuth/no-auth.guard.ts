@@ -16,7 +16,7 @@ export class NoAuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       if (this.authService.isLoggedIn()) {
-        this.tokenExpiration.checkTokenExpiration();
+        this.tokenExpiration.checkRefreshTokenExpiration();
         this.router.navigate(['']);
         return false;
       }
