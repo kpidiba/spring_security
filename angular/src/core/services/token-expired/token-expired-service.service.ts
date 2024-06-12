@@ -15,11 +15,10 @@ export class TokenExpiredService {
 
   checkTokenExpiration() {
     // Get the token expiration time from the AuthService
-    const tokenExpiration = this.tokenService.getTokenExpiration();
+    const tokenExpiration = this.tokenService.getRefreshTokenExpiration();
 
     if (tokenExpiration) {
       const currentTime = new Date().getTime() / 1000; // Current time in seconds
-
       // Check if the token is about to expire (e.g., within a margin of X seconds)
       const marginInSeconds = 60; // You can adjust this margin
       if ((tokenExpiration.getTime() / 1000) - currentTime < marginInSeconds) {

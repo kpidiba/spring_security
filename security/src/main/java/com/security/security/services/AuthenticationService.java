@@ -135,9 +135,6 @@ public class AuthenticationService {
                                         this.tokenRepository.save(token);
                                         var authResponse = AuthenticationResponse.builder()
                                                         .accessToken(accessToken)
-                                                        .refreshToken(refreshToken)
-                                                        .name(user.getUsername())
-                                                        .role(user.getRole().toString())
                                                         .build();
                                         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                                 }

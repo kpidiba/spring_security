@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import jwtDecode from 'jwt-decode';
-import { tap } from 'rxjs';
+import { DestroyService } from '../destroy/destroy.service';
+import { takeUntil } from 'rxjs';
 const BASE_URL = "http://127.0.0.1:8080/api/v1/auth";
 
 @Injectable({
@@ -12,7 +13,11 @@ export class TokenService {
   private refreshToken = "refreshToken";
   private accessToken = "accessToken";
   private username = "username";
+  private destroyService= inject(DestroyService);
 
+  setAccessToken(token:string){
+    return localStorage.setItem("accessToken", token);
+  }
   getAccessToken() {
     return localStorage.getItem(this.accessToken);
   }
@@ -25,8 +30,15 @@ export class TokenService {
     return localStorage.getItem(this.username);
   }
 
-  getTokenExpiration(): Date | null {
-    const token = this.getAccessToken();
+  getAccessTokenExpiration(){
+    return this.getTokenExpiration(this.getAccessToken()||"");
+  }
+
+  getRefreshTokenExpiration(){
+    return this.getTokenExpiration(this.getRefreshToken()|| "");
+  }
+
+  getTokenExpiration(token:string): Date | null {
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
@@ -62,14 +74,16 @@ export class TokenService {
         'Authorization': `Bearer ${token}`
       })
     };
-    return this.http.post(`${BASE_URL}/refresh-token`, {}, httpOptions).subscribe(
-      response => {
-        console.log('Token refreshed successfully', response);
+    return this.http.post(`${BASE_URL}/refresh-token`, {}, httpOptions).pipe(takeUntil(this.destroyService.onDestroy$)).subscribe({
+      next: (res:any) => {
+        this.setAccessToken(res['access_token']);
+        return res;
       },
-      error => {
-        console.error('Error refreshing token', error);
+      error: (error) => {
+        console.log(error);
+        return error;
       }
-    );
+    });;
   }
 
 }
