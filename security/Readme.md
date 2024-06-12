@@ -34,7 +34,7 @@
    
    - **POST METHOD**
    - **http://localhost:8080/api/v1/auth/refresh-token** 
-   - Put the **bearer token**
+   - Put refresh token in  the **bearer token** and launch the request
 
 3. **Logout**
    

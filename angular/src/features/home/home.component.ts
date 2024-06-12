@@ -1,3 +1,4 @@
+import { TokenService } from 'src/core/services/token/token.service';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { takeUntil } from 'rxjs';
@@ -21,7 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 export class HomeComponent implements OnInit {
   private authService = inject(AuthService);
   private destroyService = inject(DestroyService);
-
+ private tokenService = inject(TokenService);
   //NOTE: TABLE
   private users !: User[];
   @ViewChild(MatPaginator) paginator !: MatPaginator;
@@ -58,6 +59,10 @@ export class HomeComponent implements OnInit {
         }
       }
     );
+  }
+
+  test(){
+    this.tokenService.refreshTokens();
   }
 
   edit(value:number){

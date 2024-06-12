@@ -2,12 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from '../token/token.service';
+import { RoleService } from '../role/role.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenExpiredService {
   private authService = inject(AuthService);
+  private roleService = inject(RoleService);
   private router=  inject(Router);
   private tokenService = inject(TokenService)
 
@@ -33,6 +35,7 @@ export class TokenExpiredService {
   private logoutAndRedirect() {
     // Log the user out (clear tokens, user data, etc.)
     this.authService.logout();
+    this.roleService.logout();
     // Redirect to the login page
     this.router.navigate(['/login']);
   }

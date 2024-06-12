@@ -2,12 +2,11 @@ package com.security.security.models.auth;
 
 import java.util.Collection;
 import java.util.List;
-
+import java.util.ArrayList;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.security.security.models.token.Token;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Entity
 @Data
@@ -34,9 +34,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private List<Token> token;
+    @Builder.Default
+    private List<Token> token = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

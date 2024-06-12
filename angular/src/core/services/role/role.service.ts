@@ -16,4 +16,8 @@ export class RoleService {
   hasRole(role: string): boolean {
     return localStorage.getItem("role") == role;
   }
+
+  logout(){
+    return localStorage.removeItem("role");
+  }
 }

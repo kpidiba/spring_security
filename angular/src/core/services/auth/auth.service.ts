@@ -7,6 +7,7 @@ import { AuthenticationRequest } from 'src/core/models/AuthenticationRequest';
 import { AuthenticationResponse } from 'src/core/models/AuthentificationResponse';
 import { User } from 'src/core/models/User';
 import { TokenService } from '../token/token.service';
+import { RoleService } from '../role/role.service';
 const BASE_URL = "http://127.0.0.1:8080/api/v1/";
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ const BASE_URL = "http://127.0.0.1:8080/api/v1/";
 export class AuthService {
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
-
+  private roleService = inject(RoleService);
   login(auth: AuthenticationRequest): Observable<AuthenticationResponse> {
     return this.http.post<AuthenticationResponse>(BASE_URL + 'auth/login', auth);
   }
@@ -28,7 +29,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    const url = 'http://localhost:8080/api/v1/test/users'; // Replace with your backend API URL
+    const url = BASE_URL +'test/users'; // Replace with your backend API URL
     return this.http.get<User[]>(url, { headers });
   }
 
@@ -39,7 +40,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    let token = this.tokenService.getToken();
+    let token = this.tokenService.getAccessToken();
     if (token == undefined || token == '') {
       return false;
     } else {
@@ -51,6 +52,7 @@ export class AuthService {
 
   logout() {
     this.tokenService.logout();
+    this.roleService.logout();
     return true;
   }
 
