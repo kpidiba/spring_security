@@ -61,7 +61,7 @@ public class AuthenticationService {
                                 role = Role.CLIENT;
                                 break;
                         default:
-                                throw new IllegalArgumentException("Invalid role: "+request.getRole());
+                                throw new IllegalArgumentException("Invalid role: " + request.getRole());
                 }
 
                 // NOTE: CREATE USER
@@ -94,8 +94,8 @@ public class AuthenticationService {
                                 .getUsername(), request.getPassword()));
                 var user = userRepository.findByUsername(request.getUsername())
                                 .orElseThrow();
-                
-                //NOTE: REVOKE ALL USER TOKEN
+
+                // NOTE: REVOKE ALL USER TOKEN
                 this.revokeAllUserTokens(user);
 
                 // NOTE:GENERATE TOKEN
@@ -130,11 +130,15 @@ public class AuthenticationService {
                                 var user = this.userRepository.findByUsername(username).orElseThrow();
                                 if (jwtService.isTokenValid(refreshToken, user)) {
                                         var accessToken = jwtService.generateToken(user);
-                                        //NOTE: SAUVEGARDER DU NOUVEAU TOKEN
+                                        // NOTE: SAUVEGARDER DU NOUVEAU TOKEN
                                         var token = createToken(user, accessToken, TokenType.BEARER);
                                         this.tokenRepository.save(token);
                                         var authResponse = AuthenticationResponse.builder()
+                                                        .role(user.getRole()
+                                                                        .toString())
+                                                        .name(user.getUsername())
                                                         .accessToken(accessToken)
+                                                        .refreshToken(refreshToken)
                                                         .build();
                                         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                                 }
@@ -153,9 +157,9 @@ public class AuthenticationService {
                                 .build();
         }
 
-        private void revokeAllUserTokens(User user){
+        private void revokeAllUserTokens(User user) {
                 var validUserTokens = this.tokenRepository.findAllValidTokensByUser(user.getId());
-                if (validUserTokens.isEmpty()){
+                if (validUserTokens.isEmpty()) {
                         return;
                 }
                 validUserTokens.forEach(token -> {

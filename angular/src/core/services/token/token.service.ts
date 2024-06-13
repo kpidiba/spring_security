@@ -22,6 +22,10 @@ export class TokenService {
     return localStorage.getItem(this.accessToken);
   }
 
+  removeAccessToken(){
+    localStorage.removeItem(this.accessToken);
+  }
+
   getRefreshToken(){
     return localStorage.getItem(this.refreshToken);
   }
@@ -68,18 +72,14 @@ export class TokenService {
 
   refreshTokens(){
     const token = this.getRefreshToken();
+    console.log(token);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'Authorization': `Bearer ${token}`
       })
     };
-    return this.http.post(`${BASE_URL}/refresh-token`, {}, httpOptions).pipe(takeUntil(this.destroyService.onDestroy$)).subscribe({
-      next: (res:any) => {
-        console.log(res['access_token']);
-        this.setAccessToken(res['access_token']);
-      }
-    });
+    return this.http.post(`${BASE_URL}/refresh-token`, {}, httpOptions).pipe(takeUntil(this.destroyService.onDestroy$));
   }
 
 }

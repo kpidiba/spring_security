@@ -17,12 +17,24 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [MatButtonModule,MatFormFieldModule ,MatInputModule,MatTableModule, MatIconModule, MatPaginatorModule, MatSortModule]
+  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, MatTableModule, MatIconModule, MatPaginatorModule, MatSortModule]
 })
 export class HomeComponent implements OnInit {
+  test() {
+    this.tokenService.refreshTokens().subscribe({
+      next: (res:any) => {
+        console.log(res.access_token);
+        return res;
+      },
+      error: (error) => {
+        console.log(error);
+        return error;
+      }
+    });
+  }
   private authService = inject(AuthService);
   private destroyService = inject(DestroyService);
- private tokenService = inject(TokenService);
+  private tokenService = inject(TokenService);
   //NOTE: TABLE
   private users !: User[];
   @ViewChild(MatPaginator) paginator !: MatPaginator;
@@ -30,6 +42,8 @@ export class HomeComponent implements OnInit {
   public dataSource!: MatTableDataSource<User>;
   displayedColumns: string[] = ['id', 'name', 'role', 'action'];
   ngOnInit(): void {
+    //localStorage.removeItem("refreshToken");
+    //localStorage.removeItem("accessToken");
     this.getUsers();
   }
 
@@ -62,9 +76,11 @@ export class HomeComponent implements OnInit {
   }
 
 
-  edit(value:number){
+  edit(value: number) {
 
 
   }
+
+
 
 }
