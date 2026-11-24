@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spring-secure
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_secure?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
